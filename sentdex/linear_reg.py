@@ -4,6 +4,13 @@ import math
 import numpy as np
 from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+from matplotlib import style
+import time
+import datetime
+import pickle
+
+style.use('ggplot')
 
 
 # Configuring quandl api key
@@ -34,23 +41,66 @@ print(forcast_out)
 # and hence we can learn from that data what the data after 10 days looked like 
 df['label'] = df[forecast_col].shift(-forcast_out)
 
-df.dropna(inplace=True)
-
 # features
 X = np.array(df.drop(['label'], 1))
-# labels
-y = np.array(df['label'])
-
-#scaling X
+#scaling X avoid doing this
 X = preprocessing.scale(X)
+# data we are trying to predict
+X_lately = X[-forcast_out:]
+X = X[:-forcast_out]
 
+# labels
+df.dropna(inplace=True)
+y = np.array(df['label'])
 
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
 
-clf = LinearRegression(n_jobs=20)
+# clf = LinearRegression(n_jobs=20)
 # clf = svm.SVR(kernel='poly')
-clf.fit(X_train, y_train)
+# clf.fit(X_train, y_train)
+
+# saving trained model in pickle so dont have train full data again and again
+# with open('linear_reg.pickle', 'wb') as f:
+# 	pickle.dump(clf, f)
+
+pickle_in = open('linear_reg.pickle', 'rb')
+clf = pickle.load(pickle_in)
+
+
 accuracy = clf.score(X_test, y_test)
 
+forecast_set = clf.predict(X_lately)
 
-print(accuracy)
+print(forecast_set, accuracy, forcast_out)
+
+df['Forecast'] = np.nan
+
+last_date = df.iloc[-1].name
+print(last_date)
+last_unix = int(time.mktime(datetime.datetime.strptime(last_date, "%Y-%m-%d").timetuple()))
+one_day = 86400
+next_unix = last_unix + one_day
+
+for i in forecast_set:
+	next_date = datetime.datetime.fromtimestamp(next_unix)
+	next_unix += one_day
+	df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)] + [i]
+
+print(df.head())
+print(df.tail())
+
+
+df['Adj. Close'].plot()
+df['Forecast'].plot()
+plt.legend(loc=4)
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.show()
+
+
+
+
+
+
+
+
