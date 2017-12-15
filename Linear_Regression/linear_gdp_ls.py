@@ -2,10 +2,11 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.random as rnd
-rnd.seed(42)
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 import os
+
+rnd.seed(42)
 
 plt.rcParams['axes.labelsize'] = 14
 plt.rcParams['xtick.labelsize'] = 12
@@ -23,10 +24,10 @@ def save_fig(fig_id, tight_layout=True):
     plt.savefig(path, format='png', dpi=300)
 
 
-datapath = 'datasets/lifesat/'
+datapath = '../datasets/lifesat/'
 
 # Load the data
-oecd_bli = pd.read_csv(datapath+"oecd_bli_2015.csv", thousands=',')
+oecd_bli = pd.read_csv(os.path.join(datapath,"oecd_bli_2015.csv"), thousands=',')
 gdp_per_capita = pd.read_csv(datapath+"gdp_per_capita.csv", thousands=',', delimiter='\t', encoding='latin1', na_values='n/a')
 
 oecd_bli = oecd_bli[oecd_bli['INEQUALITY'] == 'TOT']
@@ -92,7 +93,7 @@ position_text = {
 }
 for country, pos_text in position_text.items():
     if country in train_data.index:
-   	    pos_data_x, pos_data_y = train_data.loc[country]
+        pos_data_x, pos_data_y = train_data.loc[country]
     else:
         pos_data_x, pos_data_y = test_data.loc[country]
 
@@ -100,7 +101,7 @@ for country, pos_text in position_text.items():
     plt.annotate(country, xy=(pos_data_x, pos_data_y), xytext=pos_text,
             arrowprops=dict(facecolor='black', width=0.5, shrink=0.1, headwidth=5))
     plt.plot(pos_data_x, pos_data_y, "ro")
-save_fig('money_happy_scatterplot')
+# save_fig('money_happy_scatterplot')
 plt.show()
 
 
