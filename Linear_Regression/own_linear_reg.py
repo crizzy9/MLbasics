@@ -2,8 +2,9 @@ from statistics import mean
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style
+import random
 
-style.use('fivethirtyeight')
+style.use('ggplot')
 
 
 class OwnLinearRegression:
@@ -43,9 +44,36 @@ class OwnLinearRegression:
         self.ys_line = [self.predict(x) for x in self.xs]
         return [self.predict(x) for x in self.xs]
 
+    # this only works on a small dataset and tends to be linear for larger datasets
+    # if correlation is false the data wont increment linearly since the numbers will only be in the range of variance
+    # if variance increases the the data is spaced among a larger range hence the data is more scattered
+    # if steps increase the variance matters less because on a larger plot the variation will still be scattered
+    # across a small range and the rate at which steps increase y is less than that of variance so
+    # its scattered data across a range that increments linearly
+    @staticmethod
+    def create_dataset(hm, variance, step=2, correlation=None):
+        val = 1
+        ys = []
+        for _ in range(hm):
+            y = val + random.randrange(-variance, variance)
+            ys.append(y)
+            if correlation == 'pos':
+                val += step
+            elif correlation == 'neg':
+                val -= step
+        xs = [i for i in range(len(ys))]
 
-xs = np.array([1, 2, 3, 4, 5, 6], dtype=np.float64)
-ys = np.array([5, 4, 6, 5, 6, 7], dtype=np.float64)
+        return np.array(xs, dtype=np.float64), np.array(ys, dtype=np.float64)
+
+
+# xs = np.array([1, 2, 3, 4, 5, 6], dtype=np.float64)
+# ys = np.array([5, 4, 6, 5, 6, 7], dtype=np.float64)
+
+
+xs, ys = OwnLinearRegression.create_dataset(400, 8000, 10, correlation='pos')
+
+print(xs)
+print(ys)
 
 clf = OwnLinearRegression(xs, ys)
 
@@ -55,9 +83,14 @@ print(regline)
 cod = clf.coefficient_of_determination()
 print(cod)
 
-predict_y = clf.predict(8)
+predict_x = 8
+predict_y = clf.predict(predict_x)
 print(predict_y)
 
 plt.scatter(xs, ys)
-plt.plot(xs, regline)
+plt.scatter(predict_x, predict_y, color='g')
+plt.plot(xs, regline, 'b')
 plt.show()
+
+
+# reference: sentdex

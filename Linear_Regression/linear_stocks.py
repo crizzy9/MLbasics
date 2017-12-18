@@ -10,6 +10,8 @@ import time
 import datetime
 import pickle
 
+# multivariate linear regression
+
 style.use('ggplot')
 
 # Configuring quandl api key
@@ -31,7 +33,7 @@ df.fillna(-9999, inplace=True)
 
 # with regression you 'generally' (dont have to) forcast out cols you want
 # 0.1 is to get data for past 10 days into the future
-forcast_out = int(math.ceil(0.01 * len(df)))
+forcast_out = int(math.ceil(0.1 * len(df)))
 print(forcast_out)
 
 # the negative shift will set Adj.Close according to forcast_out i.e 10 days into the future
@@ -39,7 +41,8 @@ print(forcast_out)
 df['label'] = df[forecast_col].shift(-forcast_out)
 
 # features
-X = np.array(df.drop(['label'], 1))
+# X = np.array(df.drop(['label'], 1))
+X = np.array(df[['Adj. Close']])
 # scaling X avoid doing this
 X = preprocessing.scale(X)
 # data we are trying to predict
@@ -51,21 +54,26 @@ df.dropna(inplace=True)
 y = np.array(df['label'])
 
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
+print(X_test)
 
-# clf = LinearRegression(n_jobs=20)
+clf = LinearRegression(n_jobs=20)
 # clf = svm.SVR(kernel='poly')
-# clf.fit(X_train, y_train)
+clf.fit(X_train, y_train)
 
 # saving trained model in pickle so dont have train full data again and again
 # with open('linear_reg.pickle', 'wb') as f:
 # 	pickle.dump(clf, f)
 
-pickle_in = open('linear_reg.pickle', 'rb')
-clf = pickle.load(pickle_in)
+# pickle_in = open('linear_reg.pickle', 'rb')
+# clf = pickle.load(pickle_in)
 
 accuracy = clf.score(X_test, y_test)
 
 forecast_set = clf.predict(X_lately)
+
+
+t0, t1 = clf.intercept_, clf.coef_
+
 
 print(forecast_set, accuracy, forcast_out)
 
@@ -87,7 +95,10 @@ print(df.tail())
 
 df['Adj. Close'].plot()
 df['Forecast'].plot()
+plt.plot(X_train, t0 + t1*X_train, 'g')
 plt.legend(loc=4)
 plt.xlabel('Date')
 plt.ylabel('Price')
 plt.show()
+
+# reference: sentdex

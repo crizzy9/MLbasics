@@ -6,6 +6,8 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 import os
 
+# univariate linear regression
+
 rnd.seed(42)
 
 plt.rcParams['axes.labelsize'] = 14
@@ -104,6 +106,4 @@ for country, pos_text in position_text.items():
 # save_fig('money_happy_scatterplot')
 plt.show()
 
-
-
-
+# reference: hands on ml
