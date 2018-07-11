@@ -26,7 +26,7 @@ def save_fig(fig_id, tight_layout=True):
     plt.savefig(path, format='png', dpi=300)
 
 
-datapath = '../datasets/lifesat/'
+datapath = '../../datasets/lifesat/'
 
 # Load the data
 oecd_bli = pd.read_csv(os.path.join(datapath,"oecd_bli_2015.csv"), thousands=',')

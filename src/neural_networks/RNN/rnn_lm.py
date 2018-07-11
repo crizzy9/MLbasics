@@ -5,7 +5,7 @@ import nltk
 import csv
 import sys
 from datetime import datetime
-from RNN.utils import *
+from .utils import *
 import matplotlib.pyplot as plt
 
 

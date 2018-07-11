@@ -17,7 +17,7 @@ style.use('ggplot')
 
 plt.rcParams["patch.force_edgecolor"] = True
 
-housing_path = '../datasets/housing'
+housing_path = '../../datasets/housing'
 
 housing = pd.read_csv(os.path.join(housing_path, 'housing.csv'))
 
