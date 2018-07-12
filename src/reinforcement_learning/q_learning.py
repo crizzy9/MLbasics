@@ -20,7 +20,7 @@ for i in range(num_episodes):
     while j < 99:
         j += 1
         a = np.argmax(Q[s, :] + np.random.randn(1, env.action_space.n)*(1./(i+1)))
-        # env.render()
+        env.render()
         s1, r, d, _ = env.step(a)
         Q[s, a] = Q[s, a] + lr*(r + y*np.max(Q[s1, :]) - Q[s, a])
         rAll += r
