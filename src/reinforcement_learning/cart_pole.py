@@ -1,6 +1,13 @@
 import os
 import gym
 import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.callbacks import TensorBoard
+# from tflearn.layers import input_data, fully_connected, dropout
+# from tflearn.layers.estimator import regression
+# from statistics import median, mean
+# from collections import Counter
 
 
 # use neural network with x = [4] and y = [2]
@@ -26,11 +33,13 @@ def generate_train_data(no_of_episodes, total_steps):
 
 
 def train(training_files):
+    model = Sequential()
+
     for f in training_files:
         y, X = np.fromfile(f)
 
 
 
 if __name__ == '__main__':
-    generate_train_data(2000, 500)
-    # train(os.listdir('./train_data'))
+    # generate_train_data(2000, 500)
+    train(os.listdir('./train_data'))
