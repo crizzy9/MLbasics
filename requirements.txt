@@ -7,3 +7,6 @@ universe
 matplotlib
 nltk
 quandl
+tensorflow
+tflearn
+keras
