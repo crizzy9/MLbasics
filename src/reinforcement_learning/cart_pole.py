@@ -107,7 +107,7 @@ def train(train_data, model=False):
     if not model:
         model = nn_model(len(X[0]))
 
-    model.fit({'input': X}, {'targets': y}, n_epoch=5, snapshot_step=500, show_metric=True, run_id='openai_learning')
+    model.fit({'input': X}, {'targets': y}, n_epoch=3, snapshot_step=500, show_metric=True, run_id='openai_learning')
     print('Saving Model')
     # model.save('./models/{}.tfl'.format(game))
     # model.load()
@@ -143,9 +143,9 @@ def run(model):
         for t in range(total_steps):
             env.render()
 
-            print('Model prediction {}'.format(model.predict(observation.reshape(-1, len(observation), 1))))
-
+            # print('Model prediction {}'.format(model.predict(observation.reshape(-1, len(observation), 1))))
             action = np.argmax(model.predict(observation.reshape(-1, len(observation), 1))[0])
+            # print('Chosen action {}'.format(action))
             choices.append(action)
 
             observation, reward, done, info = env.step(action)
@@ -157,14 +157,13 @@ def run(model):
                 break
 
         scores.append(score)
-    print('Average accepted score: {}'.format(mean(scores)))
-    print('Median score for accepted scores: {}'.format(median(scores)))
+    print('Average score: {}'.format(mean(scores)))
     print('Choice 1: {}, Choice 2: {}'.format(choices.count(1)/len(choices), choices.count(0)/len(choices)))
 
 
 if __name__ == '__main__':
-    # training_data = generate_train_data(3000)
-    training_data = np.load(data_loc+'.npy')
+    training_data = generate_train_data(10000)
+    # training_data = np.load(data_loc+'.npy')
     model = train(training_data)
     # model = load_pickle(model_loc)
     run(model)
