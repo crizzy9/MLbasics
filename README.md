@@ -10,6 +10,8 @@ pip3 install -r src/requirements.txt
 
 Install gym version "0.9.5"
 
+Install gym environments with `pip3 install 'gym[all]'`
+
 ### Other dependancies
 ```
 brew install golang
