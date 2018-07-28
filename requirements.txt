@@ -3,6 +3,8 @@ pandas
 scipy
 sklearn
 gym==0.9.5
+# do gym all from terminal inside single quotes then only itll install
+'gym[all]'
 universe
 matplotlib
 nltk
