@@ -17,6 +17,8 @@ steps = 1000
 data_loc = './train_data/{}'.format(game)
 model_loc = './model/{}.pickle'.format(game)
 
+# solution criteria: average score 900 over 100 consecutive tries
+
 
 def generate_train_data(no_of_episodes):
     scores = []
@@ -33,6 +35,8 @@ def generate_train_data(no_of_episodes):
             game_data.append([action, observation])
             observation, reward, done, info = env.step()
             score += reward
+            if episode < 2:
+                print('step: {}, score: {}'.format(t, score))
             if done:
                 print('Episode {} finished after {} timesteps with score {}'.format(episode, t+1, score))
                 break
@@ -84,6 +88,7 @@ def nn_model(input_size):
 
     return model, tensorboard
 
+
 def train(epochs):
     for epoch in range(epochs):
         current = 0
@@ -101,4 +106,4 @@ def train(epochs):
             brake = []
 
             # for t in train_data:
-                
+
