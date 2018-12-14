@@ -40,6 +40,7 @@ class NeuralNetwork:
     @staticmethod
     def activate(vals, func):
         # vals format n x 1
+        # also do `softmax`
         if func == 'relu':
             for v in vals:
                 v[0] = max(0, v[0])
