@@ -12,3 +12,5 @@ quandl
 tensorflow
 tflearn
 keras
+pytorch
+torchvision

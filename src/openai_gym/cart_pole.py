@@ -26,6 +26,7 @@ model_loc = './model/{}.pickle'.format(game)
 LR = 0.001
 total_steps = 500
 
+# Add instructions for how to run it
 
 def generate_train_data(no_of_episodes):
     scores = []

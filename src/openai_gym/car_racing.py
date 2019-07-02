@@ -18,6 +18,7 @@ data_loc = './train_data/{}'.format(game)
 model_loc = './model/{}.pickle'.format(game)
 
 # solution criteria: average score 900 over 100 consecutive tries
+# Add instructions for how to run it
 
 
 def generate_train_data(no_of_episodes):
